@@ -1,5 +1,6 @@
 {
   "name": "@stetsonpierce/simple-cache",
+  "private": false,
   "version": "1.0.6",
   "description": "A fast, simple and lightweight key value store for modern browsers",
   "main": "index.js",
