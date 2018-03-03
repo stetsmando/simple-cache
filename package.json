@@ -1,7 +1,7 @@
 {
   "name": "simple-cache",
-  "version": "1.0.3",
-  "description": "A fast, simple and lightweight key-value store for modern browsers",
+  "version": "1.0.4",
+  "description": "A fast, simple and lightweight key value store for modern browsers",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
