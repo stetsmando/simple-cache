@@ -1,10 +1,10 @@
 export default class SimpleCache {
   constructor({
-    defaultTtl = 1000 * 60 * 60 * 24, // 24 hour default
+    defaultTTL = 1000 * 60 * 60 * 24, // 24 hour default
     namespace = 'SC_',
     logMessages = false, // No logging by default
   }) {
-    this.defaultTtl = defaultTtl;
+    this.defaultTTL = defaultTTL;
     this.namespace = namespace;
     this.logMessages = logMessages;
   }
@@ -25,6 +25,8 @@ export default class SimpleCache {
       if (this.logMessages) {
         console.log('SC:Item expired, returning null');
       }
+      localStorage.removeItem(`${ this.namespace }${ key }`);
+
       return null;
     }
 
@@ -38,7 +40,7 @@ export default class SimpleCache {
     let ttl = expiresIn;
 
     ttl = !ttl || ttl.constructor !== Date ?
-      new Date(Date.now() + this.defaultTtl).valueOf() :
+      new Date(Date.now() + this.defaultTTL).valueOf() :
       expiresIn.valueOf();
 
     const item = { value, ttl };
