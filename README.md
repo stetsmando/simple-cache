@@ -9,10 +9,10 @@ Feel free to head over to the [GitHut](https://github.com/stetsmando/simple-cach
 ## Installation
 ```bash
 # NPM 5+
-npm install simple-cache
+npm install @stetsonpierce/simple-cache
 
 # Older NPM versions
-npm install simple-cache --save
+npm install @stetsonpierce/simple-cache --save
 ```
 
 ## Simple Example

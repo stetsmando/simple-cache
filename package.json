@@ -1,5 +1,5 @@
 {
-  "name": "simple-cache",
+  "name": "@stetsonpierce/simple-cache",
   "version": "1.0.5",
   "description": "A fast, simple and lightweight key value store for modern browsers",
   "main": "index.js",
