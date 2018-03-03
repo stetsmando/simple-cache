@@ -1,9 +1,11 @@
 {
   "name": "@stetsonpierce/simple-cache",
-  "private": false,
-  "version": "1.0.7",
+  "version": "1.0.0",
   "description": "A fast, simple and lightweight key value store for modern browsers",
   "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +20,8 @@
     "easy",
     "key",
     "value",
-    "store"
+    "store",
+    "simple-cache"
   ],
   "author": "Stetson Pierce",
   "license": "MIT",
