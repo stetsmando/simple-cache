@@ -1,0 +1,28 @@
+{
+  "name": "simple-cache",
+  "version": "1.0.0",
+  "description": "A fast, simple and lightweight key-value store for modern browsers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stetsmando/simple-cache.git"
+  },
+  "keywords": [
+    "browser",
+    "cache",
+    "simple",
+    "easy",
+    "key",
+    "value",
+    "store"
+  ],
+  "author": "Stetson Pierce",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stetsmando/simple-cache/issues"
+  },
+  "homepage": "https://github.com/stetsmando/simple-cache#readme"
+}
