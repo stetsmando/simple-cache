@@ -22,13 +22,13 @@ import SimpleCache from 'simple-cache';
 
 // Create a new instance
 const simpleCache = new SimpleCache({
-  defaultTtl: 1000 * 60 * 60 * 24,
+  defaultTTL: 1000 * 60 * 60 * 24,
   namespace: 'MYAPP_',
   logMessages: true,
 });
 
 /** Quick aside about provided properties:
-* defaultTtl defines a number in minisecons into the future that cached
+* defaultTTL defines a number in minisecons into the future that cached
 * objects should persist.
 *
 * namespace defines the prefix to all keys provided. This helps ensure
