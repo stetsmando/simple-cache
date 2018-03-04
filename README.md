@@ -28,7 +28,7 @@ const simpleCache = new SimpleCache({
 });
 
 /** Quick aside about provided properties:
-* defaultTTL defines a number in minisecons into the future that cached
+* defaultTTL defines a number in milliseconds into the future that cached
 * objects should persist.
 *
 * namespace defines the prefix to all keys provided. This helps ensure
