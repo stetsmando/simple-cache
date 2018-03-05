@@ -18,7 +18,7 @@ npm install @stetsonpierce/simple-cache --save
 ## Simple Example
 ```javascript
 // Import the package (Compiled Frameworks)
-import SimpleCache from 'simple-cache';
+import SimpleCache from '@stetsonpierce/simple-cache';
 
 // Create a new instance
 const simpleCache = new SimpleCache({
