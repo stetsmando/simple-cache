@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/stetsmando/simple-cache/issues"
   },
-  "homepage": "https://simple-cache.herokuapp.com"
+  "homepage": "https://simple-cache.herokuapp.com",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
