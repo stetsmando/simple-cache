@@ -30,6 +30,12 @@
   },
   "homepage": "https://simple-cache.herokuapp.com",
   "devDependencies": {
-    "gulp": "^3.9.1"
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.6.1",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0"
   }
 }

@@ -1,4 +1,4 @@
-/** @license SimpleCache v1.X
+/** @license SimpleCache v2.X
  * simple-cache.js
  *
  * Author: Stetson Pierce
