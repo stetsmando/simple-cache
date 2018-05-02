@@ -22,11 +22,11 @@ gulp.task('babel', (done) =>
 );
 
 gulp.task('add-comment', (done) => {
-  gulp.src([ 'src/comment.js', 'dist/simple-cache.js' ])
+  gulp.src([ 'src/comment.txt', 'dist/simple-cache.js' ])
     .pipe(concat('simple-cache.js'))
     .pipe(gulp.dest(OUTPUT_DIR))
     .on('end', () => {
-      gulp.src([ 'src/comment.js', 'dist/simple-cache.min.js' ])
+      gulp.src([ 'src/comment.txt', 'dist/simple-cache.min.js' ])
         .pipe(concat('simple-cache.min.js'))
         .pipe(gulp.dest(OUTPUT_DIR))
         .on('end', () => {
