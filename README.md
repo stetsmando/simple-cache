@@ -3,8 +3,6 @@
 
 Question or comments please feel free to open an [issue](https://github.com/stetsmando/simple-cache/issues) or email me at stetsmando@gmail.com. You can also visit the simple-cache [website](https://simple-cache.herokuapp.com/).
 
-> SimpleCache v2 is currently under development. You can check out the progress [here](https://github.com/stetsmando/simple-cache/projects/1)! Are there features you'd like to see? Submit them as an [Enhancement](https://github.com/stetsmando/simple-cache/issues);
-
 ## Want to Contribute or Help Out?
 Feel free to head over to the [GitHut](https://github.com/stetsmando/simple-cache) page and submit comments, issues, pulls and whatever else you'd like. I plan on adding features as I need them for my own projects so if something isn't happening fast enough for you why not do it yourself? :wink:
 
