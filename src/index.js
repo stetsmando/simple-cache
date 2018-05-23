@@ -33,13 +33,13 @@ export default class SimpleCache {
     }
     else if (Array.isArray(args[0])) {
       // Bulk operation
-      if (args[2]) {
+      if (args[1]) {
         // We're using Session Storage
         
       }
       else {
         // We're using Local Storage
-        args[1].forEach(obj => {
+        args[0].forEach(obj => {
           let ttl = this.ttl;
           if (obj.value.ttl) {
             ttl = obj.value.ttl;
