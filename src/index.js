@@ -12,6 +12,7 @@ export default class SimpleCache {
   }
 
   set(...args) {
+    console.log(`Setting...`);
     if (typeof args[0] == 'string') {
       // Single Input
       if (args[2]) {
