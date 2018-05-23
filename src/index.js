@@ -33,6 +33,23 @@ export default class SimpleCache {
     }
     else if (Array.isArray(args[0])) {
       // Bulk operation
+      if (args[2]) {
+        // We're using Session Storage
+        
+      }
+      else {
+        // We're using Local Storage
+        args[1].forEach(obj => {
+          let ttl = this.ttl;
+          if (obj.value.ttl) {
+            ttl = obj.value.ttl;
+            delete obj.value.ttl;
+          }
+
+          const item = { value: obj.value, ttl };
+          local.set(`${ this.namespace }${ obj.key }`, JSON.stringify(item));
+        });
+      }
     }
   }
 
