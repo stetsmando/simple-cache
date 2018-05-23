@@ -55,7 +55,26 @@ export default class SimpleCache {
     }
   }
 
+  get(...args) {
+    if (typeof args[0] == 'string') {
+      // Single Retrieval
+      let item = local.get(`${ this.namespace }${ args[0] }`);
+      if (!item)
+        return null;
+
+      item = JSON.parse(item);
+      if (Date.now() >= item.ttl) {
+        // Item has expired
+        local.remove(`${ this.namespace }${ args[0] }`);
+        return null;
+      }
+
+      return item.value;
+    }
+    else if (Array.isArray(args[0])) {
+      // Multi Retrieval
+    }
+  }
   // setInStone(...args) {}
-  // get(...args) {}
   // remove(...args) {}
 }
