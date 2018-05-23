@@ -4,6 +4,7 @@ export default class LocalStorage {
   }
 
   get(key) {
+    debugger;
     localStorage.getItem(key);
   }
 
