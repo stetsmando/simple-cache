@@ -58,6 +58,7 @@ export default class SimpleCache {
   get(...args) {
     if (typeof args[0] == 'string') {
       // Single Retrieval
+      debugger;
       let item = local.get(`${ this.namespace }${ args[0] }`);
       if (!item)
         return null;
