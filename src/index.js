@@ -32,6 +32,7 @@ export default class SimpleCache {
       }
     }
     else if (Array.isArray(args[0])) {
+      debugger;
       // Bulk operation
       if (args[1]) {
         // We're using Session Storage
@@ -39,6 +40,7 @@ export default class SimpleCache {
       }
       else {
         // We're using Local Storage
+        debugger;
         args[0].forEach(obj => {
           let ttl = this.ttl;
           if (obj.value.ttl) {
