@@ -2,12 +2,13 @@
   "name": "@stetsonpierce/simple-cache",
   "version": "1.1.1",
   "description": "A fast, simple and lightweight key value store for modern browsers",
-  "main": "index.js",
+  "main": "dist/simple-cache.min.js",
   "directories": {
-    "lib": "lib"
+    "src": "src",
+    "dist": "dist"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp"
   },
   "repository": {
     "type": "git",

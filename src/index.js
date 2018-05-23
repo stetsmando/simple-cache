@@ -1,59 +1,41 @@
+import LocalStorage from './lib/LocalStorage';
+import SessionStorage from './lib/SessionStorage';
+
+const local = new LocalStorage();
+const session = new SessionStorage();
+
 export default class SimpleCache {
-  constructor({
-    defaultTTL = 1000 * 60 * 60 * 24, // 24 hour default
-    namespace = 'SC_',
-    logMessages = false, // No logging by default
-  }) {
-    this.defaultTTL = defaultTTL;
-    this.namespace = namespace;
-    this.logMessages = logMessages;
+  constructor(ttl, namespace, logMessages) {
+    this.ttl = ttl || 1000 * 60 * 60 * 24 // 24 hours
+    this.namespace = namespace || 'SC_';
+    this.logMessages = logMessages || false;
   }
-  get(key) {
-    if (this.logMessages) {
-      console.log(`SC:Looking up cache for key:${this.namespace }${ key }`);
-    }
-    let item = localStorage.getItem(`${ this.namespace }${ key }`);
-    if (!item) {
-      if (this.logMessages) {
-        console.log('SC:No item found');
+
+  set(...args) {
+    if (typeof args[0] == 'string') {
+      // Single Input
+      if (args[2]) {
+        // We're using Session Storage
+        console.log(`Session - Caching: ${ args[0] }: ${ args[1] }`);
       }
-      return null;
-    }
+      else {
+        // We're using Local Storage
+        let ttl = this.ttl;
+        if (args[1].ttl) {
+          ttl = args[1].ttl;
+          delete args[1].ttl;
+        }
 
-    item = JSON.parse(item);
-    if (Date.now() >= item.ttl) {
-      if (this.logMessages) {
-        console.log('SC:Item expired, returning null');
+        const item = { value: args[1], ttl };
+        local.set(`${ this.namespace }${ args[0] }`, JSON.stringify(item));
       }
-      localStorage.removeItem(`${ this.namespace }${ key }`);
-
-      return null;
     }
-
-    if (this.logMessages) {
-      console.log(`SC:Cached Value\nKEY:${ this.namespace }${ key }\nVALUE:${ JSON.stringify(item, null, 2) }`);
+    else if (Array.isArray(args[0])) {
+      // Bulk operation
     }
-    return item.value;
   }
 
-  cache(key, value, expiresIn) {
-    let ttl = expiresIn;
-
-    ttl = !ttl || ttl.constructor !== Date ?
-      new Date(Date.now() + this.defaultTTL).valueOf() :
-      expiresIn.valueOf();
-
-    const item = { value, ttl };
-    if (this.logMessages) {
-      console.log(`SC:Caching\nKEY: ${ this.namespace }${ key }\nVALUE: ${ JSON.stringify(item, null, 2) }`);
-    }
-    localStorage.setItem(`${ this.namespace }${ key }`, JSON.stringify(item));
-  }
-
-  bust(key) {
-    if (this.logMessages) {
-      console.log(`SC:Bust cache for:${ this.namespace }${ key }`);
-    }
-    localStorage.removeItem(`${ this.namespace }${ key }`);
-  }
+  // setInStone(...args) {}
+  // get(...args) {}
+  // remove(...args) {}
 }

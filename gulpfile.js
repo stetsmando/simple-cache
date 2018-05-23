@@ -35,6 +35,15 @@ gulp.task('add-comment', (done) => {
     })
 });
 
-gulp.task('default', gulp.series('babel', 'add-comment', (done) => {
+gulp.task('deps', (done) => {
+  gulp.src(['src/lib/*.js'])
+    .pipe(babel({
+      presets: ['env']
+    }))
+    .pipe(gulp.dest(OUTPUT_DIR + '/lib'))
+    .on('end', () => done())
+});
+
+gulp.task('default', gulp.series('babel', 'add-comment', 'deps', (done) => {
   done();
 }));
