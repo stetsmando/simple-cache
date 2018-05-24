@@ -54,7 +54,7 @@ export default class SimpleCache {
     }
   }
 
-  async get(...args) {
+  get(...args) {
     if (typeof args[0] == 'string') {
       // Single Retrieval
       let item = local.get(`${ this.namespace }${ args[0] }`);
@@ -91,7 +91,8 @@ export default class SimpleCache {
         }));
       });
 
-      return await Promise.all(promises);
+      Promise.all(promises)
+        .then(results => results);
     }
   }
   // setInStone(...args) {}
