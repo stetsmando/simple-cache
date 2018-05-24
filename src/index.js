@@ -33,7 +33,6 @@ export default class SimpleCache {
       }
     }
     else if (Array.isArray(args[0])) {
-      debugger;
       // Bulk operation
       if (args[1]) {
         // We're using Session Storage
@@ -41,7 +40,6 @@ export default class SimpleCache {
       }
       else {
         // We're using Local Storage
-        debugger;
         args[0].forEach(obj => {
           let ttl = this.ttl;
           if (obj.value.ttl) {
@@ -56,10 +54,9 @@ export default class SimpleCache {
     }
   }
 
-  get(...args) {
+  async get(...args) {
     if (typeof args[0] == 'string') {
       // Single Retrieval
-      debugger;
       let item = local.get(`${ this.namespace }${ args[0] }`);
       if (!item)
         return null;
@@ -75,6 +72,26 @@ export default class SimpleCache {
     }
     else if (Array.isArray(args[0])) {
       // Multi Retrieval
+      const promises = [];
+
+      args[0].forEach(key => {
+        promises.push(new Promise((resolve, reject) => {
+          let item = local.get(`${ this.namespace }${ key }`);
+          if (!item)
+            return resolve(null);
+
+          item = JSON.stringify(item);
+          if (Date.now() >= item.ttl) {
+            // Item has expired
+            local.remove(`${ this.namespace }${ key }`);
+            return resolve(null);
+          }
+
+          return resolve(item.value);
+        }));
+      });
+
+      return await Promise.all(promises);
     }
   }
   // setInStone(...args) {}
