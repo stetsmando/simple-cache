@@ -11,7 +11,7 @@ export default class SimpleCache {
     this.logMessages = logMessages || false;
   }
 
-  set(...args) {
+  async set(...args) {
     console.log(`Setting...`);
     if (typeof args[0] == 'string') {
       // Single Input
@@ -39,18 +39,22 @@ export default class SimpleCache {
         
       }
       else {
-        // TODO: Possibly make this async so you can wait for sets to be completed
         // We're using Local Storage
-        args[0].forEach(obj => {
-          let ttl = this.ttl;
-          if (obj.value.ttl) {
-            ttl = obj.value.ttl;
-            delete obj.value.ttl;
-          }
+        const promises = [];
 
-          ttl += Date.now();
-          const item = { value: obj.value, ttl };
-          local.set(`${ this.namespace }${ obj.key }`, JSON.stringify(item));
+        args[0].forEach(obj => {
+          promises.push((resolve, reject) => {
+            let ttl = this.ttl;
+            if (obj.value.ttl) {
+              ttl = obj.value.ttl;
+              delete obj.value.ttl;
+            }
+  
+            ttl += Date.now();
+            const item = { value: obj.value, ttl };
+            local.set(`${ this.namespace }${ obj.key }`, JSON.stringify(item));
+            resolve();
+          });
         });
       }
     }
