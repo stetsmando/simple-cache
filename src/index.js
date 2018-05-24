@@ -47,6 +47,7 @@ export default class SimpleCache {
             delete obj.value.ttl;
           }
 
+          ttl += Date.now();
           const item = { value: obj.value, ttl };
           local.set(`${ this.namespace }${ obj.key }`, JSON.stringify(item));
         });
