@@ -39,6 +39,7 @@ export default class SimpleCache {
         
       }
       else {
+        // TODO: Possibly make this async so you can wait for sets to be completed
         // We're using Local Storage
         args[0].forEach(obj => {
           let ttl = this.ttl;
@@ -92,10 +93,27 @@ export default class SimpleCache {
         }));
       });
 
-      const results = await Promise.all(promises)
-      return results;
+      return await Promise.all(promises);
     }
   }
-  // setInStone(...args) {}
-  // remove(...args) {}
+
+  async remove(...args) {
+    if (typeof args[0] == 'string') {
+      // Single Removal
+      local.remove(args[0]);
+    }
+    else if (Array.isArray(args[0])) {
+      // Multi Removal
+      const promises = [];
+
+      args[0].forEach(key => {
+        promises.push(new Promise((resolve, reject) => {
+          local.remove(key);
+          resolve();
+        }));
+      });
+
+      return await Promise.all(promises);
+    }
+  }
 }
