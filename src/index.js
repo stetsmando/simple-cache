@@ -80,7 +80,7 @@ export default class SimpleCache {
           if (!item)
             return resolve(null);
 
-          item = JSON.stringify(item);
+          item = JSON.parse(item);
           if (Date.now() >= item.ttl) {
             // Item has expired
             local.remove(`${ this.namespace }${ key }`);
@@ -91,11 +91,8 @@ export default class SimpleCache {
         }));
       });
 
-      return Promise.all(promises)
-        .then(results => {
-          debugger;
-          return results;
-        });
+      Promise.all(promises)
+        .then(results => results);
     }
   }
   // setInStone(...args) {}
