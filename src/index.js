@@ -93,7 +93,10 @@ export default class SimpleCache {
       });
 
       Promise.all(promises)
-        .then(results => results);
+        .then(results => {
+          debugger;
+          return results
+        });
     }
   }
   // setInStone(...args) {}
