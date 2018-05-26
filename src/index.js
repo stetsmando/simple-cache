@@ -12,7 +12,6 @@ export default class SimpleCache {
   }
 
   async set(...args) {
-    console.log(`Setting...`);
     if (typeof args[0] == 'string') {
       // Single Input
       if (args[2]) {
@@ -21,14 +20,7 @@ export default class SimpleCache {
       }
       else {
         // We're using Local Storage
-        let ttl = this.ttl;
-        if (args[1].ttl) {
-          ttl = args[1].ttl;
-          delete args[1].ttl;
-        }
-
-        ttl += Date.now();
-        const item = { value: args[1], ttl };
+        const item = this.buildItem(args[1]);
         local.set(`${ this.namespace }${ args[0] }`, JSON.stringify(item));
       }
     }
@@ -119,5 +111,17 @@ export default class SimpleCache {
 
       return await Promise.all(promises);
     }
+  }
+
+  buildItem(obj) {
+    let ttl = this.ttl;
+    if (obj.ttl) {
+      ttl = obj.ttl;
+      delete obj.ttl;
+    }
+
+    ttl += Date.now();
+
+    return { value: obj, ttl };
   }
 }
