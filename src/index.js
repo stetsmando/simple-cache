@@ -14,16 +14,22 @@ export default class SimpleCache {
   async set(...args) {
     if (typeof args[0] == 'string') {
       // Single Input
+      if (this.logMessages) { console.log(`SC:Set Single`) }
       const key = `${ this.namespace }${ args[0] }`;
+      if (this.logMessages) { console.log(`SC:Key ${ key }`) }
 
       if (args[2]) {
         // We're using Session Storage
+        if (this.logMessages) { console.log(`SC:Storing in Session`) }
         const item = this.buildItem(args[1]);
+        if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
         session.set(key, item);
       }
       else {
         // We're using Local Storage
+        if (this.logMessages) { console.log(`SC:Storing in Local`) }
         const item = this.buildItem(args[1]);
+        if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
         local.set(key, item);
       }
     }
