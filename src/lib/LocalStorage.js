@@ -1,6 +1,6 @@
 export default class LocalStorage {
   set(key, value) {
-    localStorage.setItem(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
   get(key) {

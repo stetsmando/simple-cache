@@ -14,14 +14,17 @@ export default class SimpleCache {
   async set(...args) {
     if (typeof args[0] == 'string') {
       // Single Input
+      const key = `${ this.namespace }${ args[0] }`;
+
       if (args[2]) {
         // We're using Session Storage
-        console.log(`Session - Caching: ${ args[0] }: ${ args[1] }`);
+        const item = this.buildItem(args[1]);
+        session.set(key, item);
       }
       else {
         // We're using Local Storage
         const item = this.buildItem(args[1]);
-        local.set(`${ this.namespace }${ args[0] }`, JSON.stringify(item));
+        local.set(key, item);
       }
     }
     else if (Array.isArray(args[0])) {

@@ -1,5 +1,13 @@
 export default class SessionStorage {
-  constructor() {
-    this.isNode = typeof window === 'undefined';
+  set(key, value) {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  }
+
+  get(key) {
+    return sessionStorage.getItem(key);
+  }
+
+  remove(key) {
+    sessionStorage.removeItem(key);
   }
 }
