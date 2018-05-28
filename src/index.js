@@ -31,7 +31,18 @@ export default class SimpleCache {
       // Bulk operation
       if (args[1]) {
         // We're using Session Storage
-        
+        const promises = [];
+
+        args[0].forEach(obj => {
+          promises.push((resolve, reject) => {
+            const key = `${ this.namespace }${ obj.key }`;
+            const item = this.buildItem(obj);
+            session.set(key, item);
+            resolve();
+          });
+        });
+
+        return Promise.all(promises);
       }
       else {
         // We're using Local Storage
@@ -39,18 +50,14 @@ export default class SimpleCache {
 
         args[0].forEach(obj => {
           promises.push((resolve, reject) => {
-            let ttl = this.ttl;
-            if (obj.value.ttl) {
-              ttl = obj.value.ttl;
-              delete obj.value.ttl;
-            }
-  
-            ttl += Date.now();
-            const item = { value: obj.value, ttl };
-            local.set(`${ this.namespace }${ obj.key }`, JSON.stringify(item));
+            const key = `${ this.namespace }${ obj.key }`;
+            const item = this.buildItem(obj);
+            local.set(key, item);
             resolve();
           });
         });
+
+        return Promise.all(promises);
       }
     }
   }
