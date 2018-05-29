@@ -5,6 +5,6 @@ export default class Logger {
   }
 
   log(msg) {
-    if (this.isActive) { console.log(`${ this.key }msg`) }
+    if (this.isActive) { console.log(`${ this.key } ${ msg }`) }
   }
 }

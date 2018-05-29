@@ -17,61 +17,68 @@ export default class SimpleCache {
       // Single Input
       const key = `${ this.namespace }${ args[0] }`;
       
-      this.logger.log(`SC:Set Single`);
-      this.logger.log(`SC:Key ${ key }`);
+      this.logger.log(`Set Single`);
+      this.logger.log(`Key ${ key }`);
 
       if (args[2]) {
         // We're using Session Storage
-        if (this.logMessages) { console.log(`SC:Storing in Session`) }
         const item = this.buildItem(args[1]);
-        if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
+
+        this.logger.log(`Storing in Session`);
+        this.logger.log(`Item ${ JSON.stringify(item) }`);
         session.set(key, item);
       }
       else {
         // We're using Local Storage
-        if (this.logMessages) { console.log(`SC:Storing in Local`) }
         const item = this.buildItem(args[1]);
-        if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
+
+        this.logger.log(`Storing in Local`);
+        this.logger.log(`Item ${ JSON.stringify(item) }`);
         local.set(key, item);
       }
     }
     else if (Array.isArray(args[0])) {
       // Bulk operation
-      if (this.logMessages) { console.log(`SC:Set Multi`) }
+      this.logger.log(`Set Multi`);
 
       if (args[1]) {
         // We're using Session Storage
-        if (this.logMessages) { console.log(`SC:Storing in Session`) }
-        if (this.logMessages) { console.log(`SC:Values ${ args[0] }`) }
+        this.logger.log(`Storing in Session`);
+        this.logger.log(`Values ${ args[0] }`);
+
         const promises = [];
 
         args[0].forEach(obj => {
           promises.push(new Promise((resolve, reject) => {
             const key = `${ this.namespace }${ obj.key }`;
             const item = this.buildItem(obj);
-            if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
+            this.logger.log(`Item ${ JSON.stringify(item) }`);
             session.set(key, item);
             resolve();
           }));
         });
 
-        if (this.logMessages) { console.log(`SC:All Promises Created`) }
+        this.logger.log(`All Promises Created`);
         return Promise.all(promises);
       }
       else {
         // We're using Local Storage
-        if (this.logMessages) { console.log(`SC:Storing in Local`) }
+        this.logger.log(`Storing in Local`);
+        this.logger.log(`Values ${ args[0] }`);
+
         const promises = [];
 
         args[0].forEach(obj => {
           promises.push(new Promise((resolve, reject) => {
             const key = `${ this.namespace }${ obj.key }`;
             const item = this.buildItem(obj);
+            this.logger.log(`Item ${ JSON.stringify(item) }`);
             local.set(key, item);
             resolve();
           }));
         });
 
+        this.logger.log(`All Promises Created`);
         return Promise.all(promises);
       }
     }
