@@ -35,23 +35,30 @@ export default class SimpleCache {
     }
     else if (Array.isArray(args[0])) {
       // Bulk operation
+      if (this.logMessages) { console.log(`SC:Set Multi`) }
+
       if (args[1]) {
         // We're using Session Storage
+        if (this.logMessages) { console.log(`SC:Storing in Session`) }
+        if (this.logMessages) { console.log(`SC:Values ${ args[0] }`) }
         const promises = [];
 
         args[0].forEach(obj => {
           promises.push((resolve, reject) => {
             const key = `${ this.namespace }${ obj.key }`;
             const item = this.buildItem(obj);
+            if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
             session.set(key, item);
             resolve();
           });
         });
 
-        return Promise.all(promises);
+        if (this.logMessages) { console.log(`SC:All Promises Created`) }
+        return await Promise.all(promises);
       }
       else {
         // We're using Local Storage
+        if (this.logMessages) { console.log(`SC:Storing in Local`) }
         const promises = [];
 
         args[0].forEach(obj => {
