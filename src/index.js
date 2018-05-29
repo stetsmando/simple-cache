@@ -54,7 +54,7 @@ export default class SimpleCache {
         });
 
         if (this.logMessages) { console.log(`SC:All Promises Created`) }
-        return await Promise.all(promises);
+        // return await Promise.all(promises);
       }
       else {
         // We're using Local Storage
@@ -70,7 +70,7 @@ export default class SimpleCache {
           });
         });
 
-        return Promise.all(promises);
+        // return Promise.all(promises);
       }
     }
   }
