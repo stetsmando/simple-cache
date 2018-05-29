@@ -1,5 +1,6 @@
 import LocalStorage from './lib/LocalStorage';
 import SessionStorage from './lib/SessionStorage';
+import Logger from './lib/Logger';
 
 const local = new LocalStorage();
 const session = new SessionStorage();
@@ -8,15 +9,16 @@ export default class SimpleCache {
   constructor(ttl, namespace, logMessages) {
     this.ttl = ttl || 1000 * 60 * 60 * 24 // 24 hours
     this.namespace = namespace || 'SC_';
-    this.logMessages = logMessages || false;
+    this.logger = new Logger(logMessages);
   }
 
   async set(...args) {
     if (typeof args[0] == 'string') {
       // Single Input
-      if (this.logMessages) { console.log(`SC:Set Single`) }
       const key = `${ this.namespace }${ args[0] }`;
-      if (this.logMessages) { console.log(`SC:Key ${ key }`) }
+      
+      this.logger.log(`SC:Set Single`);
+      this.logger.log(`SC:Key ${ key }`);
 
       if (args[2]) {
         // We're using Session Storage
@@ -44,17 +46,17 @@ export default class SimpleCache {
         const promises = [];
 
         args[0].forEach(obj => {
-          promises.push((resolve, reject) => {
+          promises.push(new Promise((resolve, reject) => {
             const key = `${ this.namespace }${ obj.key }`;
             const item = this.buildItem(obj);
             if (this.logMessages) { console.log(`SC:Item ${ JSON.stringify(item) }`) }
             session.set(key, item);
             resolve();
-          });
+          }));
         });
 
         if (this.logMessages) { console.log(`SC:All Promises Created`) }
-        // return await Promise.all(promises);
+        return Promise.all(promises);
       }
       else {
         // We're using Local Storage
@@ -62,15 +64,15 @@ export default class SimpleCache {
         const promises = [];
 
         args[0].forEach(obj => {
-          promises.push((resolve, reject) => {
+          promises.push(new Promise((resolve, reject) => {
             const key = `${ this.namespace }${ obj.key }`;
             const item = this.buildItem(obj);
             local.set(key, item);
             resolve();
-          });
+          }));
         });
 
-        // return Promise.all(promises);
+        return Promise.all(promises);
       }
     }
   }
