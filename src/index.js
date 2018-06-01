@@ -87,15 +87,57 @@ export default class SimpleCache {
   async get(...args) {
     if (typeof args[0] == 'string') {
       // Single Retrieval
-      let item = local.get(`${ this.namespace }${ args[0] }`);
-      if (!item)
-        return null;
+      const key = `${ this.namespace }${ args[0] }`;
+      let found = 'session';
+
+      this.logger.log(`Get Single`);
+      this.logger.log(`Key ${ key }`);
+      this.logger.log(`Checking Session...`);
+
+      let item = session.get(key);
+      if (!item) {
+        this.logger(`Checking Local...`);
+        this.found = 'local';
+        item = local.get(key);
+        if (!item) {
+          this.logger.log(`Nothing Found`);
+          return null;
+        }
+      }
+
+      this.logger.log(`Item Found`);
 
       item = JSON.parse(item);
+
       if (Date.now() >= item.ttl) {
-        // Item has expired
-        local.remove(`${ this.namespace }${ args[0] }`);
-        return null;
+        this.logger.log(`Item Expired`);
+        if (found === 'session') {
+          this.logger.log('Remove Session');
+          session.remove(key);
+          this.logger(`Checking Local...`);
+          item = local.get(key);
+          if (!item) {
+            this.logger.log(`Local Not Found`);
+            return null;
+          }
+
+          this.logger.log(`Item Found`);
+
+          item = JSON.parse(item);
+
+          if (Date.now() >= item.ttl) {
+            this.logger.log(`Item Expired`);
+            this.logger.log('Remove Local');
+            local.remove(key);
+            return null;
+          }
+        }
+        else {
+          this.logger.log(`Item Expired`);
+          this.logger.log('Remove Local');
+          local.remove(key);
+          return null;
+        }
       }
 
       return item.value;
