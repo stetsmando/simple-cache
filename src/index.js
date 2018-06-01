@@ -96,7 +96,7 @@ export default class SimpleCache {
 
       let item = session.get(key);
       if (!item) {
-        this.logger(`Checking Local...`);
+        this.logger.log(`Checking Local...`);
         this.found = 'local';
         item = local.get(key);
         if (!item) {
@@ -114,7 +114,7 @@ export default class SimpleCache {
         if (found === 'session') {
           this.logger.log('Remove Session');
           session.remove(key);
-          this.logger(`Checking Local...`);
+          this.logger.log(`Checking Local...`);
           item = local.get(key);
           if (!item) {
             this.logger.log(`Local Not Found`);
