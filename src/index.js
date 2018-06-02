@@ -6,10 +6,10 @@ const local = new LocalStorage();
 const session = new SessionStorage();
 
 export default class SimpleCache {
-  constructor(ttl, namespace, logMessages) {
-    this.ttl = ttl || 1000 * 60 * 60 * 24 // 24 hours
-    this.namespace = namespace || 'SC_';
-    this.logger = new Logger(logMessages);
+  constructor(opts) {
+    this.ttl = opts.ttl || 1000 * 60 * 60 * 24 // 24 hours
+    this.namespace = opts.namespace || 'SC_';
+    this.logger = new Logger(opts.logMessages || false);
   }
 
   async set(...args) {
