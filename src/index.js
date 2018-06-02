@@ -170,18 +170,23 @@ export default class SimpleCache {
   async remove(...args) {
     if (typeof args[0] == 'string') {
       // Single Removal
+      this.logger.log(`Remove Single`);
       const key = `${ this.namespace }${ args[0] }`;
+      this.logger.log(`Key ${ key }`);
       local.remove(key);
       session.remove(key);
     }
     else if (Array.isArray(args[0])) {
       // Multi Removal
+      this.logger.log(`Remove Multi`);
       const promises = [];
 
       args[0].forEach(key => {
         promises.push(new Promise((resolve, reject) => {
-          local.remove(`${ this.namespace }${ key }`);
-          session.remove(`${ this.namespace }${ key }`);
+          const fullKey = `${ this.namespace }${ key }`;
+          this.logger.log(`Key ${ fullKey }`);
+          local.remove(fullKey);
+          session.remove(fullKey);
           resolve();
         }));
       });
