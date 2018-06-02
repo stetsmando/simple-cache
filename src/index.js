@@ -170,7 +170,9 @@ export default class SimpleCache {
   async remove(...args) {
     if (typeof args[0] == 'string') {
       // Single Removal
-      local.remove(`${ this.namespace }${ args[0] }`);
+      const key = `${ this.namespace }${ args[0] }`;
+      local.remove(key);
+      session.remove(key);
     }
     else if (Array.isArray(args[0])) {
       // Multi Removal
@@ -179,6 +181,7 @@ export default class SimpleCache {
       args[0].forEach(key => {
         promises.push(new Promise((resolve, reject) => {
           local.remove(`${ this.namespace }${ key }`);
+          session.remove(`${ this.namespace }${ key }`);
           resolve();
         }));
       });
