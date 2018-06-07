@@ -1,6 +1,6 @@
 {
   "name": "@stetsonpierce/simple-cache",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A fast, simple and lightweight expiring key value store for modern browsers.",
   "main": "src/index.js",
   "directories": {
@@ -8,7 +8,10 @@
     "dist": "dist"
   },
   "scripts": {
-    "build-patch": "webpack && npm version patch"
+    "build": "webpack",
+    "build-patch": "webpack && npm version patch",
+    "build-minor": "webpack && npm version minor",
+    "build-major": "webpack && npm version major"
   },
   "repository": {
     "type": "git",
@@ -33,11 +36,6 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.6.1",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^7.0.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
     "webpack": "^4.11.0",
     "webpack-cli": "^3.0.2"
   }
