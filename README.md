@@ -31,6 +31,8 @@ npm i @stetsonpierce/simple-cache
 ### Via **Script Tag**
 ```html
 <--! index.hmtl -->
+<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache/lib/simple-cache.min.js"></script>
+
 <script>
   const cache = new SimpleCache.default();
   cache.set('someKey', 'someValue');
@@ -64,17 +66,17 @@ console.log(await cache.get('someKey')); // Logs null
     * `{ boolean } logMessages`
 * **Returns:** `SimpleCache Instance`
 
-### **ttl**
+#### **`ttl`**
 * **Type:** `number`
 * **Default:** `1000 * 60 * 60 * 24 | (24 Hours)`
 * **Details:** Defines the global default for caching time in milliseconds, can be overridden per item. See [overriding ttl](https://github.com/stetsmando/simple-cache/tree/master#overriding-ttl) for more info.
 
-### **namespace**
+#### **`namespace`**
 * **Type:** `string`
 * **Default:** `SC_`
 * **Details:** Defines the global namespace prefix for all cached items.
 
-### **logMessages**
+#### **`logMessages`**
 * **Type:** `boolean`
 * **Default:** `false`
 * **Details:** Enables verbose logging for all operations. Very useful for debugging. See [debugging](https://github.com/stetsmando/simple-cache/tree/master#debugging) for more info.
