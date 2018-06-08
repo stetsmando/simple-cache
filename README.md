@@ -69,7 +69,7 @@ console.log(await cache.get('someKey')); // Logs null
 #### **`ttl`**
 * **Type:** `number`
 * **Default:** `1000 * 60 * 60 * 24 | (24 Hours)`
-* **Details:** Defines the global default for caching time in milliseconds, can be overridden per item. See [overriding ttl](https://github.com/stetsmando/simple-cache/tree/master#overriding-ttl) for more info.
+* **Details:** Defines the global default for caching time in milliseconds, can be overridden per item. See [overriding ttl](#overriding-ttl) for more info.
 
 #### **`namespace`**
 * **Type:** `string`
@@ -79,7 +79,7 @@ console.log(await cache.get('someKey')); // Logs null
 #### **`logMessages`**
 * **Type:** `boolean`
 * **Default:** `false`
-* **Details:** Enables verbose logging for all operations. Very useful for debugging. See [debugging](https://github.com/stetsmando/simple-cache/tree/master#debugging) for more info.
+* **Details:** Enables verbose logging for all operations. Very useful for debugging. See [debugging](#debugging) for more info.
 
 ### Example:
 ```javascript
@@ -100,7 +100,7 @@ const cache = new SimpleCache({
 
 `cache.set` is used to store values in either local or session storage. The default storage location is local storage. To indicate **session storage** as the desired data store just pass `true` for the session parameter. Values provided can be anything serializable via JSON.stringify, this includes `strings`, `booleans`, `Objects`, etc. 
 
-_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](https://github.com/stetsmando/simple-cache/tree/master#bulk-operations) for more info._
+_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](#bulk-operations) for more info._
 
 * **Example:**
 ```javascript
@@ -119,7 +119,7 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 `cache.get` provides a uniform way to retrieve any value that has been stored by SimpleCache. The values are stringified so they will be accessible as JavaScript objects after you retrieve them. `cache.get` also provides waterfall logic for retrieval. Meaning **session storage** is checked first followed by **local storage** if nothing is found. Since **session storage** is more fragile it is respected as the highest priority for cached items.
 
-_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](https://github.com/stetsmando/simple-cache/tree/master#bulk-operations) for more info._
+_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](#bulk-operations) for more info._
 
 * **Example:**
 ```javascript
@@ -143,7 +143,7 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 `cache.remove` will remove a cached value from both **session storage** and **local storage**.
 
-_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](https://github.com/stetsmando/simple-cache/tree/master#bulk-operations) for more info._
+_NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk operations](#bulk-operations) for more info._
 
 * **Example:**
 ```javascript
@@ -184,7 +184,7 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
   * `{ Array<any> } values`
 * **Description:**
 
-`cache.get` requires an array of strings that correlate to keys being requested. The bulk operations follow the same [waterfall](https://github.com/stetsmando/simple-cache/tree/master#waterfall) logic that the singular operation does.
+`cache.get` requires an array of strings that correlate to keys being requested. The bulk operations follow the same [waterfall](#waterfall) logic that the singular operation does.
 
 * **Example:**
 ```javascript
@@ -222,7 +222,7 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 ```
 
 ## Overriding TTL
-Short for **_Time To Live_**, ttl specifies how long to respect a cached value before determining it has expired. While SimpleCache gives you the [global ttl](https://github.com/stetsmando/simple-cache/tree/master#ttl) as a default for all items being cached, it also gives you the ability to specify a ttl on a per item basis. However, this only works if you pass an `Object` into set that has a `ttl` property.
+Short for **_Time To Live_**, ttl specifies how long to respect a cached value before determining it has expired. While SimpleCache gives you the [global ttl](#ttl) as a default for all items being cached, it also gives you the ability to specify a ttl on a per item basis. However, this only works if you pass an `Object` into set that has a `ttl` property.
 
 **Example:**
 ```javascript
