@@ -9,7 +9,7 @@ function SimpleCache({
   Object.assign(this, { ttl, namespace, store, debug })
 
   this._log = msg => {
-    this.debug && console.debug(msg)
+    this.debug && console.debug(`SIMPLE_CACHE: ${msg}`)
   }
 
   this.set = (key, value, store = this.store, ttl) => {

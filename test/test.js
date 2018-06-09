@@ -58,6 +58,27 @@ describe('SimpleCache test suite', () => {
       assert.equal(null, cache.get('key'))
     })
 
+    it('Allows bulk setting of items', () => {
+      cache.set([['key1', 'value1'], ['key2', 'value2']])
+      const cacheEntry1 = JSON.parse(localStorage.getItem('SimpleCache_key1'))
+      const cacheEntry2 = JSON.parse(localStorage.getItem('SimpleCache_key2'))
+      assert.equal(cacheEntry1.value, 'value1')
+      assert.equal(cacheEntry2.value, 'value2')
+    })
+
+    it('Allows bulk getting of items', () => {
+      const [value1, value2] = cache.get(['key1', 'key2'])
+      assert.equal(value1, 'value1')
+      assert.equal(value2, 'value2')
+    })
+
+    it('Allows bulk removal of items', () => {
+      cache.set([['key1', 'value1'], ['key2', 'value2']])
+      cache.remove(['key1', 'key2'])
+      assert.strictEqual(null, cache.get('key1'))
+      assert.strictEqual(null, cache.get('key2'))
+    })
+
     it('Allows custom ttl', () => {
       cache.set('key', 'value', 1000)
       const cacheEntry = JSON.parse(localStorage.getItem('SimpleCache_key'))
