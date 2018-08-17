@@ -1,7 +1,7 @@
 # Simple Cache
 > A fast, simple and lightweight expiring key value store for modern browsers.
 
-![Version](https://img.shields.io/badge/Version-3.X-brightgreen.svg) [![](https://data.jsdelivr.com/v3/package/npm/@stetsonpierce/simple-cache/badge)](https://www.jsdelivr.com/package/npm/@stetsonpierce/simple-cache)
+![Version](https://img.shields.io/badge/Version-3.X-brightgreen.svg) [![](https://data.jsdelivr.com/v1/package/npm/@stetsonpierce/simple-cache/badge)](https://www.jsdelivr.com/package/npm/@stetsonpierce/simple-cache)
 
 Question or comments please feel free to open an [issue](https://github.com/stetsmando/simple-cache/issues) or email me at me@stetson.io. You can also visit the simple-cache [website](https://simple-cache.herokuapp.com/).
 
