@@ -1,209 +1,119 @@
-import LocalStorage from './lib/LocalStorage';
-import SessionStorage from './lib/SessionStorage';
-import Logger from './lib/Logger';
+import setItem from './operations/set_item'
+import getItem from './operations/get_item'
+import removeItem from './operations/remove_item'
+import Item from './util/item'
+import Logger from './util/logger'
 
-const local = new LocalStorage();
-const session = new SessionStorage();
+import session from './storage/session_storage'
+import local from './storage/local_storage'
 
 export default class SimpleCache {
-  constructor(opts = {}) {
-    this.ttl = opts.ttl || 1000 * 60 * 60 * 24 // 24 hours
-    this.namespace = opts.namespace || 'SC_';
-    this.logger = new Logger(opts.logMessages || false);
+  constructor (opts = {}) {
+    this.ttl = opts.ttl
+      ? opts.ttl
+      : 1000 * 60 * 60 * 24 // 24 hour default
+    this.namespace = opts.namespace
+      ? opts.namespace
+      : 'SimpleCache:'
+    this.log = Logger.create({
+      debug: opts.debug,
+      key: this.namespace
+    })
+    this.buildItem = Item.create(this.ttl, this.log).build
   }
 
-  async set(...args) {
-    if (typeof args[0] == 'string') {
-      // Single Input
-      const key = `${ this.namespace }${ args[0] }`;
-      
-      this.logger.log(`Set Single`);
-      this.logger.log(`Key ${ key }`);
+  set (...args) {
+    if (typeof args[0] === 'string') {
+      // Single Set
+      let store = null
 
       if (args[2]) {
         // We're using Session Storage
-        const item = this.buildItem(args[1]);
-
-        this.logger.log(`Storing in Session`);
-        this.logger.log(`Item ${ JSON.stringify(item) }`);
-        session.set(key, item);
-      }
-      else {
+        this.log(`Storing in Session`)
+        store = session
+      } else {
         // We're using Local Storage
-        const item = this.buildItem(args[1]);
-
-        this.logger.log(`Storing in Local`);
-        this.logger.log(`Item ${ JSON.stringify(item) }`);
-        local.set(key, item);
+        this.log(`Storing in Local`)
+        store = local
       }
-    }
-    else if (Array.isArray(args[0])) {
-      // Bulk operation
-      this.logger.log(`Set Multi`);
+
+      return setItem.single({
+        key: `${this.namespace}${args[0]}`,
+        value: this.buildItem(args[1]),
+        store,
+        log: this.log
+      })
+    } else if (Array.isArray(args[0])) {
+      // Multi Set
+      const values = args[0].map(({ key, value }) => {
+        return {
+          key: `${this.namespace}${key}`,
+          value: this.buildItem(value)
+        }
+      })
+      let store = null
 
       if (args[1]) {
-        // We're using Session Storage
-        this.logger.log(`Storing in Session`);
-        this.logger.log(`Values ${ args[0] }`);
-
-        const promises = [];
-
-        args[0].forEach(obj => {
-          promises.push(new Promise((resolve, reject) => {
-            const key = `${ this.namespace }${ obj.key }`;
-            const item = this.buildItem(obj);
-            this.logger.log(`Item ${ JSON.stringify(item) }`);
-            session.set(key, item);
-            resolve();
-          }));
-        });
-
-        this.logger.log(`All Promises Created`);
-        return Promise.all(promises);
+        // We're using session storage
+        this.log(`Storing in Session`)
+        store = session
+      } else {
+        this.log(`Storing in Local`)
+        store = local
       }
-      else {
-        // We're using Local Storage
-        this.logger.log(`Storing in Local`);
-        this.logger.log(`Values ${ args[0] }`);
 
-        const promises = [];
-
-        args[0].forEach(obj => {
-          promises.push(new Promise((resolve, reject) => {
-            const key = `${ this.namespace }${ obj.key }`;
-            const item = this.buildItem(obj);
-            this.logger.log(`Item ${ JSON.stringify(item) }`);
-            local.set(key, item);
-            resolve();
-          }));
-        });
-
-        this.logger.log(`All Promises Created`);
-        return Promise.all(promises);
-      }
+      return setItem.multi({
+        namespace: this.namespace,
+        values,
+        store,
+        log: this.log
+      })
     }
   }
 
-  async get(...args) {
-    if (typeof args[0] == 'string') {
+  get (...args) {
+    // NOTE: I don't love this but I need to pass in the stores
+    // explicitly. I'll come back and do this is a cleaner way.
+    if (typeof args[0] === 'string') {
       // Single Retrieval
-      const key = `${ this.namespace }${ args[0] }`;
-      let found = 'session';
-
-      this.logger.log(`Get Single`);
-      this.logger.log(`Key ${ key }`);
-      this.logger.log(`Checking Session...`);
-
-      let item = session.get(key);
-      if (!item) {
-        this.logger.log(`Checking Local...`);
-        this.found = 'local';
-        item = local.get(key);
-        if (!item) {
-          this.logger.log(`Nothing Found`);
-          return null;
-        }
-      }
-
-      this.logger.log(`Item Found`);
-
-      item = JSON.parse(item);
-
-      if (Date.now() >= item.ttl) {
-        this.logger.log(`Item Expired`);
-        if (found === 'session') {
-          this.logger.log('Remove Session');
-          session.remove(key);
-          this.logger.log(`Checking Local...`);
-          item = local.get(key);
-          if (!item) {
-            this.logger.log(`Local Not Found`);
-            return null;
-          }
-
-          this.logger.log(`Item Found`);
-
-          item = JSON.parse(item);
-
-          if (Date.now() >= item.ttl) {
-            this.logger.log(`Item Expired`);
-            this.logger.log('Remove Local');
-            local.remove(key);
-            return null;
-          }
-        }
-        else {
-          this.logger.log(`Item Expired`);
-          this.logger.log('Remove Local');
-          local.remove(key);
-          return null;
-        }
-      }
-
-      return item.value;
-    }
-    else if (Array.isArray(args[0])) {
-      // Multi Retrieval
-      const promises = [];
-
-      args[0].forEach(key => {
-        promises.push(new Promise((resolve, reject) => {
-          let item = local.get(`${ this.namespace }${ key }`);
-          if (!item)
-            return resolve(null);
-
-          item = JSON.parse(item);
-          if (Date.now() >= item.ttl) {
-            // Item has expired
-            local.remove(`${ this.namespace }${ key }`);
-            return resolve(null);
-          }
-
-          return resolve(item.value);
-        }));
-      });
-
-      return await Promise.all(promises);
-    }
-  }
-
-  async remove(...args) {
-    if (typeof args[0] == 'string') {
-      // Single Removal
-      this.logger.log(`Remove Single`);
-      const key = `${ this.namespace }${ args[0] }`;
-      this.logger.log(`Key ${ key }`);
-      local.remove(key);
-      session.remove(key);
-    }
-    else if (Array.isArray(args[0])) {
+      return getItem.single({
+        key: `${this.namespace}${args[0]}`,
+        local,
+        session,
+        log: this.log
+      })
+    } else if (Array.isArray(args[0])) {
       // Multi Removal
-      this.logger.log(`Remove Multi`);
-      const promises = [];
+      const keys = args[0].map(key => `${this.namespace}${key}`)
 
-      args[0].forEach(key => {
-        promises.push(new Promise((resolve, reject) => {
-          const fullKey = `${ this.namespace }${ key }`;
-          this.logger.log(`Key ${ fullKey }`);
-          local.remove(fullKey);
-          session.remove(fullKey);
-          resolve();
-        }));
-      });
-
-      return await Promise.all(promises);
+      return getItem.multi({
+        keys,
+        local,
+        session,
+        log: this.log
+      })
     }
   }
 
-  buildItem(obj) {
-    let ttl = this.ttl;
-    if (obj.ttl) {
-      ttl = obj.ttl;
-      delete obj.ttl;
+  remove (...args) {
+    const stores = [ session, local ]
+
+    if (typeof args[0] === 'string') {
+      // Single Removal
+      return removeItem.single({
+        key: `${this.namespace}${args[0]}`,
+        stores,
+        log: this.log
+      })
+    } else if (Array.isArray(args[0])) {
+      // Multi Removal
+      const keys = args[0].map(key => `${this.namespace}${key}`)
+
+      return removeItem.multi({
+        keys,
+        stores,
+        log: this.log
+      })
     }
-
-    ttl += Date.now();
-
-    return { value: obj, ttl };
   }
 }

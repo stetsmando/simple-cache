@@ -1,7 +1,7 @@
 # Simple Cache
 > A fast, simple and lightweight expiring key value store for modern browsers.
 
-![Version](https://img.shields.io/badge/Version-2.X-brightgreen.svg) [![](https://data.jsdelivr.com/v1/package/npm/@stetsonpierce/simple-cache/badge)](https://www.jsdelivr.com/package/npm/@stetsonpierce/simple-cache)
+![Version](https://img.shields.io/badge/Version-3.X-brightgreen.svg) [![](https://data.jsdelivr.com/v3/package/npm/@stetsonpierce/simple-cache/badge)](https://www.jsdelivr.com/package/npm/@stetsonpierce/simple-cache)
 
 Question or comments please feel free to open an [issue](https://github.com/stetsmando/simple-cache/issues) or email me at me@stetson.io. You can also visit the simple-cache [website](https://simple-cache.herokuapp.com/).
 
@@ -63,7 +63,7 @@ console.log(await cache.get('someKey')); // Logs null
   * `{ Object } [options]`
     * `{ number } ttl`
     * `{ string } namespace`
-    * `{ boolean } logMessages`
+    * `{ boolean } debug`
 * **Returns:** `SimpleCache Instance`
 
 #### **`ttl`**
@@ -76,17 +76,17 @@ console.log(await cache.get('someKey')); // Logs null
 * **Default:** `SC_`
 * **Details:** Defines the global namespace prefix for all cached items.
 
-#### **`logMessages`**
+#### **`debug`**
 * **Type:** `boolean`
 * **Default:** `false`
-* **Details:** Enables verbose logging for all operations. Very useful for debugging. See [debugging](#debugging) for more info.
+* **Details:** Enables verbose logging for all operations. See [debugging](#debugging) for more info.
 
 ### Example:
 ```javascript
 const cache = new SimpleCache({
   ttl: 1000 * 30, // 30 seconds
   namespace: 'MYAPP_',
-  logMessages: true,
+  debug: true,
 });
 ```
 
@@ -123,13 +123,13 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 * **Example:**
 ```javascript
-  const myString = await cache.get('myString');
+  const myString = cache.get('myString');
   console.log(myString); // Prints 'myValue'
 
-  const myObject = await cache.get('myObject');
+  const myObject = cache.get('myObject');
   console.log(myObject.isCool); // Prints true
 
-  const myBool = await cache.get('myBool');
+  const myBool = cache.get('myBool');
   if (myBool) {
     console.log(myBool); // Prints true
   }
@@ -149,11 +149,11 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 ```javascript
   cache.remove('myString');
 
-  console.log(await cache.get('myString')); // Prints null
+  console.log(cache.get('myString')); // Prints null
 ```
 
 ## Bulk Operations
-`cache.set`, `cache.get` and `cache.remove` have all been written to support bulk operations in addition to single input. This is accomplished by passing an array of values rather than a single input.
+`cache.set`, `cache.get` and `cache.remove` have all been written to support bulk operations in addition to single input. This is accomplished by passing an array of values rather than a single input. It's worth noting that all bulk operations will return a promise that you can chain or await.
 
 ### **cache.set(values, [session])**
 * **Arguments:**
@@ -167,13 +167,13 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 * **Example:**
 ```javascript
-  cache.set([
+  await cache.set([
     { key: 'myString1', value: 'value1' },
     { key: 'myString2', value: 'value2' },
     { key: 'myString3', value: 'value3' },
   ]);
 
-  console.log(await cache.get('myString2')); // Prints 'value2'
+  console.log(cache.get('myString2')); // Prints 'value2'
 ```
 
 ### **cache.get(keys)**
@@ -188,14 +188,15 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 * **Example:**
 ```javascript
-  cache.set([
+  await cache.set([
     { key: 'myString1', value: 'value1' },
     { key: 'myString2', value: 'value2' },
     { key: 'myString3', value: 'value3' },
   ]);
 
   const values = await cache.get(['myString1', 'myString5', 'myString3']);
-  // Returns ['value1', null, 'value3']
+  console.log(values)
+  // Prints ['value1', null, 'value3']
 
 ```
 
@@ -209,7 +210,7 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
 
 * **Example:**
 ```javascript
-  cache.set([
+  await cache.set([
     { key: 'myString1', value: 'value1' },
     { key: 'myString2', value: 'value2' },
     { key: 'myString3', value: 'value3' },
@@ -218,11 +219,12 @@ _NOTE: All operations provided by SimpleCache can be called in bulk, see [bulk o
   await cache.remove(['myString1', 'myString2', 'myString3']);
 
   const values = await cache.get(['myString1', 'myString2', 'myString3']);
-  // Returns [null, null, null]
+  console.log(values)
+  // Prints [null, null, null]
 ```
 
 ## Overriding TTL
-Short for **_Time To Live_**, ttl specifies how long to respect a cached value before determining it has expired. While SimpleCache gives you the [global ttl](#ttl) as a default for all items being cached, it also gives you the ability to specify a ttl on a per item basis. However, this only works if you pass an `Object` into set that has a `ttl` property.
+Short for **_Time To Live_**, ttl specifies how long to respect a cached value before determining it has expired. While SimpleCache gives you the [global ttl](#ttl) as a default for all items being cached, it also gives you the ability to specify a ttl on a per item basis. However, this only works if you pass an `Object` into set that has a `ttl` property. Currently you have to pass single item array if you want to set custom ttl for only one item.
 
 **Example:**
 ```javascript
@@ -234,18 +236,12 @@ Short for **_Time To Live_**, ttl specifies how long to respect a cached value b
 
   // After 2 Seconds the value will still be available
   setTimeout(() => {
-    cache.get('myKey')
-      .then(someValue => {
-        console.log(someValue); // Prints { value: 'Some string goes here!' }
-      });
+    console.log(cache.get('myKey')) // Prints { value: 'Some string goes here!' }
   }, 2000);
 
   // 
   setTimeout(() => {
-    cache.get('myKey')
-      .then(someValue => {
-        console.log(someValue); //Prints null
-      });
+    console.log(cache.get('myKey')) // Prints null
   }, 6000);
 ```
 
@@ -255,22 +251,22 @@ When retrieving values SimpleCache uses waterfall logic when attempting to find 
 
 ## Debugging
 
-SimpleCache has very verbose logging if you need to figure out why something isn't working the way you'd expect. Just pass `logMessages: true` to enable this.
+SimpleCache has very verbose logging if you need to figure out why something isn't working the way you'd expect. Just pass `debug: true` to enable this. SimpleCache uses either the default namespace, or the one you provided to prefix all log messages.
 
 **Example:**
 ```javascript
 import SimpleCache from '@stetsonpierce/simple-cache';
 
 const cache = new SimpleCache({
-  logMessage: true,
+  debug: true,
 });
 
 cache.set('myKey', 'myValue');
 ```
 ```bash
 # Example Output
-15:18:03.550 SC: Set Single
-15:18:03.550 SC: Key SC_myKey
-15:18:03.550 SC: Storing in Local
-15:18:03.551 SC: Item {"value":"myValue","ttl":1528492683550}
+15:18:03.550 SimpleCache:Storing in Local
+15:18:03.550 SimpleCache:Setting ttl: 1534577434218
+15:18:03.550 SimpleCache:Set Single
+15:18:03.551 SimpleCache:"SimpleCache:test":{"value":true,"ttl":1534577434218}
 ```

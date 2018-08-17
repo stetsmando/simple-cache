@@ -1,11 +1,11 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 const comment = `
-@license SimpleCache v2.X
+@license SimpleCache v3.X
 
 Author: Stetson Pierce
 
-This source code is licensed under the MIT license.`;
+This source code is licensed under the MIT license.`
 
 module.exports = {
   mode: 'production',
@@ -13,9 +13,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'simple-cache.min.js',
-    library: 'SimpleCache',
+    library: 'SimpleCache'
   },
   plugins: [
-    new webpack.BannerPlugin(comment),
-  ],
-};
+    new webpack.BannerPlugin(comment)
+  ]
+}
