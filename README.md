@@ -20,18 +20,15 @@ npm i @stetsonpierce/simple-cache
 
 ### **CDN**
 ```html
-<!-- Regular -->
-<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache/lib/simple-cache.js"></script>
-
-<!-- Or Minified -->
-<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache/lib/simple-cache.min.js"></script>
+<!-- Minified -->
+<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache@3/dist/simple-cache.min.js"></script>
 ```
 
 ## Usage
 ### Via **Script Tag**
 ```html
 <--! index.hmtl -->
-<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache/lib/simple-cache.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stetsonpierce/simple-cache@3/dist/simple-cache.min.js"></script>
 
 <script>
   const cache = new SimpleCache.default();
