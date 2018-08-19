@@ -33,9 +33,9 @@ npm i @stetsonpierce/simple-cache
 <script>
   const cache = new SimpleCache.default();
   cache.set('someKey', 'someValue');
-  console.log(await cache.get('someKey')); // Logs 'someValue'
+  console.log(cache.get('someKey')); // Logs 'someValue'
   cache.remove('someKey');
-  console.log(await cache.get('someKey')); // Logs null
+  console.log(cache.get('someKey')); // Logs null
 </script>
 ```
 ### Via **JavaScript Module**
@@ -49,9 +49,9 @@ const SimpleCache = require('@stetsonpierce/simple-cache');
 const cache = new SimpleCache();
 
 cache.set('someKey', 'someValue');
-console.log(await cache.get('someKey')); // Logs 'someValue'
+console.log(cache.get('someKey')); // Logs 'someValue'
 cache.remove('someKey');
-console.log(await cache.get('someKey')); // Logs null
+console.log(cache.get('someKey')); // Logs null
 ```
 
 ## Creation
