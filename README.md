@@ -267,3 +267,15 @@ cache.set('myKey', 'myValue');
 15:18:03.550 SimpleCache:Set Single
 15:18:03.551 SimpleCache:"SimpleCache:test":{"value":true,"ttl":1534577434218}
 ```
+
+## Changelog
+
+### v3.0
+**Major Changes:**
+* logMessages renamed to debug
+* All _single_ actions are now synchronous so you don’t have to await them
+* All operations now return _some_ value
+
+**Minor Changes:**
+* Added tests with 100% coverage
+* Refactored app to make it more maintainable, testable and approachable
