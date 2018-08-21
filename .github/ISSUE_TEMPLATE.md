@@ -1,6 +1,6 @@
 * Browser Version:
 * NPM Version:
-* SimpleCahce version Version:
+* SimpleCahce Version:
 
 - [ ] This is a **bug**
 - [ ] This is a **modification** request
