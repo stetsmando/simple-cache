@@ -1,6 +1,6 @@
 {
   "name": "@stetsonpierce/simple-cache",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "A fast, simple and lightweight expiring key value store for modern browsers.",
   "main": "src/index.js",
   "directories": {
