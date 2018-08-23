@@ -6,6 +6,9 @@
 Question or comments please feel free to open an [issue](https://github.com/stetsmando/simple-cache/issues) or email me at me@stetson.io. You can also visit the simple-cache [website](https://simple-cache.herokuapp.com/).
 
 ## About
+
+_**NOTE:**_ SimpleCache follows [semver](https://semver.org/) versioning and is under active development.
+
 Built on top of the [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) and [Window.sessionStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) APIs, `SimpleCache.js` was a solution developed to provide an expiring semi-persistent data store for modern browsers. I've written an [article](https://simple-cache.herokuapp.com/explain) explaining the how/why of SimpleCache if you're interested.
 
 ## Want to Contribute or Help Out?
@@ -272,7 +275,8 @@ cache.set('myKey', 'myValue');
 
 ### v3.0
 **Major Changes:**
-* logMessages renamed to debug
+* Fixed bug where setting bulk values wouldn't save in session storage
+* logMessages prop renamed to debug
 * All _single_ actions are now synchronous so you don’t have to await them
 * All operations now return _some_ value
 
